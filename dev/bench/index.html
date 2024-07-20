@@ -126,6 +126,8 @@
           _: '#333333'
         };
 
+        const benchColors = ['#dea584','#00add8','#f1e05a','#000080','#3572a5','#f34b7d','#a270ba','#b07219','#178600','#38ff38','#ff3838']
+
         function init() {
           function collectBenchesPerTestCase(entries) {
             const map = new Map();
@@ -141,6 +143,7 @@
                 }
               }
             }
+            console.log(map);
             return map;
           }
 
@@ -171,22 +174,28 @@
         function renderAllChars(dataSets) {
 
           function renderGraph(parent, name, dataset) {
+            const nameElem = document.createElement('h1');
+            nameElem.className = 'benchmark-sub-title';
+            nameElem.textContent = name;
+            parent.appendChild(nameElem);
+
             const canvas = document.createElement('canvas');
             canvas.className = 'benchmark-chart';
             parent.appendChild(canvas);
 
+
             const color = toolColors[dataset.length > 0 ? dataset[0].tool : '_'];
             const data = {
-              labels: dataset.map(d => d.commit.id.slice(0, 7)),
-              datasets: [
-                {
-                  label: name,
-                  data: dataset.map(d => d.bench.value),
-                  borderColor: color,
-                  backgroundColor: color + '60', // Add alpha for #rrggbbaa
-                }
-              ],
+              // labels: Object.keys(dataset).map(d => d.commit.id.slice(0, 7)),
+              labels: dataset.values().next().value.map(d => d.commit.id.slice(0, 7)),
+              datasets: Array.from(dataset).map(([key, value], index) => ({
+                label: key,
+                data: value.map(d => d.bench.value),
+                borderColor: benchColors[index % benchColors.length],
+                backgroundColor: benchColors[index % benchColors.length] + '60', // 使用myColors数组循环为每个数据集分配颜色
+              }))
             };
+
             const options = {
               scales: {
                 xAxes: [
@@ -201,7 +210,7 @@
                   {
                     scaleLabel: {
                       display: true,
-                      labelString: dataset.length > 0 ? dataset[0].bench.unit : '',
+                      labelString: dataset.values().next().value.length > 0 ? dataset.values().next().value[0].bench.unit : '',
                     },
                     ticks: {
                       beginAtZero: true,
@@ -212,13 +221,12 @@
               tooltips: {
                 callbacks: {
                   afterTitle: items => {
-                    const {index} = items[0];
-                    const data = dataset[index];
+                    const data = Array.from(dataset)[items[0].datasetIndex][1][items[0].index];
                     return '\n' + data.commit.message + '\n\n' + data.commit.timestamp + ' committed by @' + data.commit.committer.username + '\n';
                   },
                   label: item => {
                     let label = item.value;
-                    const { range, unit } = dataset[item.index].bench;
+                    const { range, unit } = Array.from(dataset)[item.datasetIndex][1][item.index].bench;
                     label += ' ' + unit;
                     if (range) {
                       label += ' (' + range + ')';
@@ -226,7 +234,7 @@
                     return label;
                   },
                   afterLabel: item => {
-                    const { extra } = dataset[item.index].bench;
+                    const { extra } = Array.from(dataset)[item.datasetIndex][1][item.index].bench;
                     return extra ? '\n' + extra : '';
                   }
                 }
@@ -236,8 +244,7 @@
                   return;
                 }
                 // XXX: Undocumented. How can we know the index?
-                const index = activeElems[0]._index;
-                const url = dataset[index].commit.url;
+                const url = Array.from(dataset)[activeElems[0]._datasetIndex][1][activeElems[0]._index].commit.url;
                 window.open(url, '_blank');
               },
             };
@@ -263,8 +270,26 @@
             graphsElem.className = 'benchmark-graphs';
             setElem.appendChild(graphsElem);
 
+            // for (const [benchName, benches] of benchSet.entries()) {
+            //   renderGraph(graphsElem, benchName, benches)
+            // }
+
+            const groupedBenchSet = new Map();
+
             for (const [benchName, benches] of benchSet.entries()) {
-              renderGraph(graphsElem, benchName, benches)
+              const lastUnderscoreIndex = benchName.lastIndexOf("_");
+              const groupKey = benchName.substring(0, lastUnderscoreIndex);
+              const subKey = benchName.substring(lastUnderscoreIndex + 1);
+
+              if (!groupedBenchSet.has(groupKey)) {
+                groupedBenchSet.set(groupKey, new Map());
+              }
+
+              groupedBenchSet.get(groupKey).set(subKey, benches);
+            }
+
+            for (const [groupKey, subBenchSet] of groupedBenchSet.entries()) {
+              renderGraph(graphsElem, groupKey, subBenchSet);
             }
           }
 
