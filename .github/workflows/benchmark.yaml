@@ -28,7 +28,7 @@ on:
     branches:
       - main
       - 1.*
-      - e2e-performance-test
+      - benchmark
 jobs:
   CI:
     runs-on: ${{ matrix.runner }}
@@ -87,6 +87,7 @@ jobs:
           name: benchmark
           tool: "customSmallerIsBetter"
           output-file-path: "test/benchmark/report/combined_benchmark.json"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
 
   result:
