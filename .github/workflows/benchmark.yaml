@@ -89,7 +89,9 @@ jobs:
           output-file-path: "test/benchmark/report/combined_benchmark.json"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
-          auto-push: true
+          auto-push: false
+
+
 
   result:
     runs-on: ubuntu-latest
