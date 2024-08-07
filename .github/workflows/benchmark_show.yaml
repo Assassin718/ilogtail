@@ -50,6 +50,16 @@ jobs:
         with:
           submodules: true
 
+      - name: Store benchmark result iLogtail
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: benchmark
+          tool: "customSmallerIsBetter"
+          output-file-path: "test/benchmark/report/ilogtail_statistic_all.json"
+          # external-data-json-path: ./cache/ilogtail_statistic.json
+          auto-push: false
+          summary-always: true
+
       - name: Store benchmark result other agents
         run: |
           git checkout gh-pages
