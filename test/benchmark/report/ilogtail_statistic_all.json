@@ -1,0 +1,22 @@
+[
+    {
+        "name": "CPU_Usage_Max - performance_file_to_blackhole_ilogtail",
+        "value": 18.570355629758794,
+        "unit": "%"
+    },
+    {
+        "name": "CPU_Usage_Avg - performance_file_to_blackhole_ilogtail",
+        "value": 2.492230339851957,
+        "unit": "%"
+    },
+    {
+        "name": "Memory_Usage_Max - performance_file_to_blackhole_ilogtail",
+        "value": 36.91015625,
+        "unit": "MB"
+    },
+    {
+        "name": "Memory_Usage_Avg - performance_file_to_blackhole_ilogtail",
+        "value": 34.473513719512205,
+        "unit": "MB"
+    }
+]
