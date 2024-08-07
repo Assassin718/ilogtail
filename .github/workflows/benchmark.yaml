@@ -107,7 +107,7 @@ jobs:
           sed -i '1s/^\[/window.BENCHMARK_RECORDS = [/' dev/bench/records_all.js
           git add dev/bench/records_all.js
           last_commit_message=$(git log -1 --pretty=%B)
-          git commit --amend -m "$last_commit_message"
+          git commit -c user.name=github-action-benchmark -c user.email=github@users.noreply.github.com --amend -m "$last_commit_message"
       
       # Push gh-pages branch by yourself
       - name: Push benchmark result
