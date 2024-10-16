@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729078726893,
+  "lastUpdate": 1729082265256,
   "repoUrl": "https://github.com/Assassin718/ilogtail",
   "entries": {
     "benchmark": [
@@ -439,6 +439,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "Memory_Usage_Avg - performance_file_to_blackhole_ilogtail",
             "value": 34.27313701923077,
+            "unit": "MB"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "13038089398@163.com",
+            "name": "QianyongXu",
+            "username": "Assassin718"
+          },
+          "committer": {
+            "email": "13038089398@163.com",
+            "name": "QianyongXu",
+            "username": "Assassin718"
+          },
+          "distinct": true,
+          "id": "4fe624996c3854b72a13fb200e47b30b7d517744",
+          "message": "test",
+          "timestamp": "2024-10-16T05:14:22-07:00",
+          "tree_id": "64ddaa68e1e873a50b507c7be140bdfc92f90eaa",
+          "url": "https://github.com/Assassin718/ilogtail/commit/4fe624996c3854b72a13fb200e47b30b7d517744"
+        },
+        "date": 1729082264347,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "CPU_Usage_Max - performance_file_to_blackhole_ilogtail",
+            "value": 69.44690640013675,
+            "unit": "%"
+          },
+          {
+            "name": "CPU_Usage_Avg - performance_file_to_blackhole_ilogtail",
+            "value": 53.36158679133226,
+            "unit": "%"
+          },
+          {
+            "name": "Memory_Usage_Max - performance_file_to_blackhole_ilogtail",
+            "value": 35.734375,
+            "unit": "MB"
+          },
+          {
+            "name": "Memory_Usage_Avg - performance_file_to_blackhole_ilogtail",
+            "value": 33.66434151785714,
             "unit": "MB"
           }
         ]
