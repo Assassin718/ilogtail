@@ -50,6 +50,7 @@
         };
 
         // Function to group benchmarks by longest name prefix
+        // Function to group benchmarks by longest name prefix
         function groupByLongestPrefix(records) {
             const groups = {};
             records.forEach(record => {
@@ -63,6 +64,17 @@
                 }
                 groups[prefix].push(record);
             });
+
+            // Find the maximum length of the arrays
+            const maxLength = Math.max(...Object.values(groups).map(group => group.length));
+
+            // Pad each array to the maximum length
+            Object.keys(groups).forEach(prefix => {
+                while (groups[prefix].length < maxLength) {
+                    groups[prefix].push({ name: '', records: Array(maxLength).fill(null) });
+                }
+            });
+
             return groups;
         }
 
@@ -111,7 +123,7 @@
                         x: {
                             title: {
                                 display: true,
-                                text: 'Record Index'
+                                text: 's'
                             }
                         },
                         y: {
