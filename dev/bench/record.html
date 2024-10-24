@@ -67,7 +67,7 @@
                 const maxLength = Math.max(...groups[prefix].map(record => record.records.length));
                 groups[prefix].forEach(record => {
                     while (record.records.length < maxLength) {
-                        record.records.push(null); // Use null to fill the array
+                        record.records.push(record.records[record.records.length - 1]); // Use null to fill the array
                     }
                 });
             });
