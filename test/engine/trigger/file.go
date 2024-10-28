@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"golang.org/x/time/rate"
-
 	"github.com/alibaba/ilogtail/test/config"
 )
 
@@ -24,32 +22,29 @@ func GenerateRandomNginxLogToFile(ctx context.Context, speed, totalTime int, pat
 	file, _ := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600) // #nosec G304
 
 	rand.Seed(time.Now().UnixNano())
-	maxLogLen := 1024
 	nginxLog := genNginxLog()
 
-	limiter := rate.NewLimiter(rate.Limit(speed*1024*1024), maxLogLen)
-
-	timeout := time.After(time.Minute * time.Duration(totalTime))
+	startTime := time.Now()
+	preTime := startTime
+	nowTime := startTime
+	var bytes int64
 
 	for {
-		select {
-		// context is done
-		case <-ctx.Done():
-			// clear file
-			_ = file.Close()
-			return ctx, nil
-		// all time is done
-		case <-timeout:
-			// clear file
-			_ = file.Close()
-			return ctx, nil
-		default:
-			if limiter.AllowN(time.Now(), len(nginxLog)) {
-				_, _ = file.WriteString(nginxLog + "\n") // #nosec G307
-				nginxLog = genNginxLog()
-			}
+		nowTime = time.Now()
+		bytes += nowTime.Sub(preTime).Microseconds() * int64(speed)
+		preTime = nowTime
+		for bytes >= int64(len(nginxLog)) {
+			_, _ = file.WriteString(nginxLog + "\n") // #nosec G307
+			bytes -= int64(len(nginxLog))
+			nginxLog = genNginxLog()
 		}
+		if nowTime.Sub(startTime).Seconds() > float64(totalTime)*60 {
+			break
+		}
+		time.Sleep(time.Second)
 	}
+
+	return ctx, nil
 }
 
 var ipAddresses = []string{
