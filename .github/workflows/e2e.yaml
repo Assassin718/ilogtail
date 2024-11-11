@@ -28,6 +28,7 @@ on:
     branches:
       - main
       - 1.*
+      - go2cpp
 jobs:
   CI:
     runs-on: ${{ matrix.runner }}
