@@ -20,6 +20,9 @@ Feature: go2cpp processor json
         Fields:
           __content__:'{"__name__": "weather", "__value__": "32", "__labels__": "city#$#hz"}'
           __tag__:db: mydb
+    processors:
+      - Type: processor_parse_json_native
+        SourceKey: __content__
     aggregators:
       - Type: aggregator_content_value_group
         GroupKeys:
