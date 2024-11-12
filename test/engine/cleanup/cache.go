@@ -21,7 +21,7 @@ import (
 
 func GoTestCache(ctx context.Context) (context.Context, error) {
 	command := "/usr/local/go/bin/go clean -testcache"
-	if err := setup.Env.ExecOnSource(ctx, command); err != nil {
+	if _, err := setup.Env.ExecOnSource(ctx, command); err != nil {
 		return ctx, err
 	}
 	return ctx, nil

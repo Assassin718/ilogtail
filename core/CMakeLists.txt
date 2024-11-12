@@ -114,7 +114,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/plugin/flusher/links.cmake)
 # Subdirectories (modules). except for common, input, processor, flusher, observer, helper, spl, and provider.
 set(SUB_DIRECTORIES_LIST
         application app_config checkpoint container_manager metadata logger go_pipeline monitor monitor/metric_constants profile_sender models
-        config config/watcher
+        config config/watcher constants
         pipeline pipeline/batch pipeline/limiter pipeline/plugin pipeline/plugin/creator pipeline/plugin/instance pipeline/plugin/interface pipeline/queue pipeline/route pipeline/serializer
         runner runner/sink/http
         protobuf/sls protobuf/models
@@ -161,7 +161,6 @@ endif()
 
 # remove several files in go_pipeline
 list(REMOVE_ITEM FRAMEWORK_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/go_pipeline/LogtailPluginAdapter.cpp ${CMAKE_CURRENT_SOURCE_DIR}/go_pipeline/LogtailPluginAdapter.h)
-
 
 # add provider
 add_subdirectory("${PROVIDER_PATH}" "${CMAKE_BINARY_DIR}/provider")

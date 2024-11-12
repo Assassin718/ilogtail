@@ -123,7 +123,7 @@ void PipelineUnittest::OnSuccessfulInit() const {
     APSARA_TEST_EQUAL("test_region", pipeline->GetContext().GetRegion());
     APSARA_TEST_EQUAL(QueueKeyManager::GetInstance()->GetKey("test_config-flusher_sls-test_project#test_logstore"),
                       pipeline->GetContext().GetLogstoreKey());
-    APSARA_TEST_EQUAL(0U, pipeline->mInProcessCnt.load());
+    APSARA_TEST_EQUAL(0, pipeline->mInProcessCnt.load());
     APSARA_TEST_EQUAL(3U, pipeline->mMetricsRecordRef->GetLabels()->size());
     APSARA_TEST_TRUE(pipeline->mMetricsRecordRef.HasLabel(METRIC_LABEL_KEY_PIPELINE_NAME, configName));
     APSARA_TEST_TRUE(pipeline->mMetricsRecordRef.HasLabel(METRIC_LABEL_KEY_PROJECT, "test_project"));
@@ -158,7 +158,7 @@ void PipelineUnittest::OnSuccessfulInit() const {
     APSARA_TEST_EQUAL("", pipeline->GetContext().GetProjectName());
     APSARA_TEST_EQUAL("", pipeline->GetContext().GetLogstoreName());
     APSARA_TEST_EQUAL("", pipeline->GetContext().GetRegion());
-    APSARA_TEST_EQUAL(0U, pipeline->mInProcessCnt.load());
+    APSARA_TEST_EQUAL(0, pipeline->mInProcessCnt.load());
 #ifndef __ENTERPRISE__
     APSARA_TEST_EQUAL(QueueKeyManager::GetInstance()->GetKey("test_config-flusher_sls-"),
                       pipeline->GetContext().GetLogstoreKey());
@@ -259,7 +259,7 @@ void PipelineUnittest::OnSuccessfulInit() const {
     APSARA_TEST_TRUE(pipeline->Init(std::move(*config)));
     APSARA_TEST_EQUAL(goPipelineWithInput.toStyledString(), pipeline->mGoPipelineWithInput.toStyledString());
     APSARA_TEST_EQUAL(goPipelineWithoutInput.toStyledString(), pipeline->mGoPipelineWithoutInput.toStyledString());
-    APSARA_TEST_EQUAL(0U, pipeline->mInProcessCnt.load());
+    APSARA_TEST_EQUAL(0, pipeline->mInProcessCnt.load());
     goPipelineWithInput.clear();
     goPipelineWithoutInput.clear();
 
@@ -305,7 +305,7 @@ void PipelineUnittest::OnSuccessfulInit() const {
     APSARA_TEST_TRUE(pipeline->Init(std::move(*config)));
     APSARA_TEST_EQUAL(1U, pipeline->mRouter.mConditions.size());
     APSARA_TEST_EQUAL(1U, pipeline->mRouter.mAlwaysMatchedFlusherIdx.size());
-    APSARA_TEST_EQUAL(0U, pipeline->mInProcessCnt.load());
+    APSARA_TEST_EQUAL(0, pipeline->mInProcessCnt.load());
 }
 
 void PipelineUnittest::OnFailedInit() const {
@@ -2763,6 +2763,7 @@ void PipelineUnittest::TestSend() const {
             // all valid
             vector<PipelineEventGroup> group;
             group.emplace_back(make_shared<SourceBuffer>());
+            group.back().AddLogEvent();
             APSARA_TEST_TRUE(pipeline.Send(std::move(group)));
         }
         {
@@ -2771,6 +2772,7 @@ void PipelineUnittest::TestSend() const {
                 = false;
             vector<PipelineEventGroup> group;
             group.emplace_back(make_shared<SourceBuffer>());
+            group.back().AddLogEvent();
             APSARA_TEST_FALSE(pipeline.Send(std::move(group)));
             const_cast<FlusherMock*>(static_cast<const FlusherMock*>(pipeline.mFlushers[0]->GetPlugin()))->mIsValid
                 = true;
