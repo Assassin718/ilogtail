@@ -39,7 +39,7 @@ Feature: go2cpp processor json
           - Type: ext_request_breaker
             FailureRatio: 0.1
     """
-    Given iLogtail depends on containers {["influxdb"]}
+    Given loongcollector depends on containers {["influxdb"]}
     When start docker-compose {flusher_http}
     Then there is at least {10} logs
     Then the log fields match kv

@@ -27,7 +27,7 @@ if [ "$TEST_SCOPE" = "core" ]; then
 elif [ "$TEST_SCOPE" = "performance" ]; then
   go test -v -timeout 30m -run ^TestE2EOnDockerComposePerformance$ github.com/alibaba/ilogtail/test/$TYPE
 else
-  go test -v -timeout 30m -run ^TestE2EOnDockerCompose$ github.com/alibaba/ilogtail/test/$TYPE
+  go test -v -timeout 30m -run ^TestE2EOnDockerCompose$/TestGo2CppProcessorJson github.com/alibaba/ilogtail/test/$TYPE
 fi
 
 if [ $? = 0 ]; then

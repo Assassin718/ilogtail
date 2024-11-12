@@ -198,9 +198,8 @@ func (wrapper *ServiceWrapperV1) runPushNativeProcessQueueInternal() {
 					wrapper.tagCached = append(wrapper.tagCached, event.Tags)
 					wrapper.ctxCached = append(wrapper.ctxCached, event.Context)
 				}
-				endTime := time.Now().Add(time.Duration(30) * time.Second)
 				for {
-					if time.Now().After(endTime) || (len(wrapper.eventCached) == 0 && len(wrapper.pbBuffer) == 0) {
+					if len(wrapper.eventCached) == 0 && len(wrapper.pbBuffer) == 0 {
 						return
 					}
 					wrapper.pushNativeProcessQueue(1)
@@ -217,9 +216,8 @@ func (wrapper *ServiceWrapperV1) runPushNativeProcessQueueInternal() {
 					wrapper.tagCached = append(wrapper.tagCached, event.Tags)
 					wrapper.ctxCached = append(wrapper.ctxCached, event.Context)
 				}
-				endTime := time.Now().Add(time.Duration(30) * time.Second)
 				for {
-					if time.Now().After(endTime) || (len(wrapper.eventCached) == 0 && len(wrapper.pbBuffer) == 0) {
+					if len(wrapper.eventCached) == 0 && len(wrapper.pbBuffer) == 0 {
 						return
 					}
 					wrapper.pushNativeProcessQueue(1)
